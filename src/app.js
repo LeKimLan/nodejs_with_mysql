@@ -22,9 +22,9 @@ server.get("/user", (req, res) => {
       return;
     }
     res.json(result);
-    mysqlDB.end((err) => {
-      console.log("err", err);
-    });
+    // mysqlDB.end((err) => {
+    //   console.log("err", err);
+    // });
   });
 });
 
