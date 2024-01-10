@@ -36,7 +36,7 @@ server.get("/user", (req, res) => {
 });
 
 server.get("/closemysql", (req, res) => {
-  mysqlDB.destroy((err) => {
+  mysqlDB.close((err) => {
     if (err) {
       console.log("err", err);
       return
