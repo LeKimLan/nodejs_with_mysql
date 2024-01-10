@@ -23,7 +23,7 @@ jobs:
         password: ${{ secrets.PW }}
         port: 22
         script: |
-          cd /var/www/node/MVC_express_server
+          cd /var/www/node/nodejs_with_mysql
           git pull
           git status
           . $HOME/.nvm/nvm.sh
