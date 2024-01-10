@@ -21,7 +21,7 @@ server.get("/user", (req, res) => {
       console.log("err", err);
       return;
     }
-    res.status(200).json(result);
+    res.json(result);
     mysqlDB.end((err) => {
       console.log("err", err);
     });
