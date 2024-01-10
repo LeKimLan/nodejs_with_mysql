@@ -1,32 +1,45 @@
-import express from 'express';
+import express from "express";
 const server = express();
 
-import {mysqlDB} from './mysql.js';
+import { mysqlDB } from "./mysql.js";
 
 mysqlDB.connect(function (err) {
-    if (err) {
-      console.error("error connecting: " + err.stack);
-      return;
-    }
-    console.log("connected as id " + mysqlDB.threadId);
-  });
+  if (err) {
+    console.error("error connecting: " + err.stack);
+    return;
+  }
+  console.log("connected as id " + mysqlDB.threadId);
+});
 
+server.get("/user", (req, res) => {
   mysqlDB.query("select * from user", (err, res) => {
     if (err) {
-        console.log("err",err);
-        return;
-    } 
-    console.log('results', res);
+      console.log("err", err);
+      return;
+    }
+    console.log("results", res);
     mysqlDB.end((err) => {
       console.log("connection end");
     });
-})
+  });
+});
+
+//   mysqlDB.query("select * from user", (err, res) => {
+//     if (err) {
+//         console.log("err",err);
+//         return;
+//     }
+//     console.log('results', res);
+//     mysqlDB.end((err) => {
+//       console.log("connection end");
+//     });
+// })
 
 // connection.query("select * from test_tools_table where id = 3", (err, res) => {
 //     if (err) {
 //         console.log("err",err);
 //         return;
-//     } 
+//     }
 //     console.log('results', res);
 // })
 
@@ -34,7 +47,7 @@ mysqlDB.connect(function (err) {
 //     if (err) {
 //         console.log("err",err);
 //         return;
-//     } 
+//     }
 //     console.log('results', res);
 // })
 
@@ -42,7 +55,7 @@ mysqlDB.connect(function (err) {
 //     if (err) {
 //         console.log("err",err);
 //         return;
-//     } 
+//     }
 //     console.log('results', res);
 // })
 
@@ -54,8 +67,6 @@ mysqlDB.connect(function (err) {
 //     console.log('results', res);
 // })
 
-
-
 server.listen(3000, () => {
-    console.log('server is on')
-})
+  console.log("server is on");
+});
