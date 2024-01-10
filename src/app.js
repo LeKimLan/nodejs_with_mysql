@@ -11,15 +11,19 @@ mysqlDB.connect(function (err) {
   console.log("connected as id " + mysqlDB.threadId);
 });
 
+server.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 server.get("/user", (req, res) => {
-  mysqlDB.query("select * from user", (err, res) => {
+  mysqlDB.query("select * from user", (err, result) => {
     if (err) {
       console.log("err", err);
       return;
     }
-    console.log("results", res);
+    res.status(200).json(result);
     mysqlDB.end((err) => {
-      console.log("connection end");
+      console.log("err", err);
     });
   });
 });
