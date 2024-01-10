@@ -13,23 +13,29 @@ function connectMySQL() {
   });
 }
 
-
 server.get("/", (req, res) => {
   res.send("Server OK!");
 });
 
-server.get("/user", (req, res) =>  {
-  connectMySQL()
-  mysqlDB.query("select * from user", (err, result) => {
-    if (err) {
-      console.log("err", err);
-      return;
-    }
-    res.json(result);
-    mysqlDB.end(() => {
-      console.log("MySQL connection closed");
+server.get("/user", (req, res) => {
+  try {
+    connectMySQL().then(() => {
+      mysqlDB.query("select * from user", (err, result) => {
+        if (err) {
+          console.log("err", err);
+          return;
+        }
+        res.json(result);
+        mysqlDB.end(() => {
+          console.log("MySQL connection closed");
+        });
+      });
     });
-  });
+  } catch {
+    (err) => {
+      console.log("err", err);
+    };
+  }
 });
 
 // server.post("/user", (req, res) => {
