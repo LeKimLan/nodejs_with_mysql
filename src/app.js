@@ -16,6 +16,14 @@ server.get("/", (req, res) => {
 });
 
 server.get("/connectmysql", (req, res) => {
+  const mysqlDB = mysql.createConnection({
+    host: '103.167.89.118',
+    user: "lan",
+    password: "admin123",
+    database: "test_remote_control_mysql",
+    port: 3306
+  });
+
   mysqlDB.connect((err) => {
     if (err) {
       res.send("error connecting: " + err.stack);
@@ -36,7 +44,7 @@ server.get("/user", (req, res) => {
 });
 
 server.get("/closemysql", (req, res) => {
-  mysqlDB.close((err) => {
+  mysqlDB.end((err) => {
     if (err) {
       console.log("err", err);
       return
