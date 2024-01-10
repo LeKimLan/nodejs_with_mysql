@@ -3,7 +3,7 @@ const server = express();
 
 import { mysqlDB } from "./mysql.js";
 
-mysqlDB.connect(function (err) {
+mysqlDB.connect((err) => {
   if (err) {
     console.error("error connecting: " + err.stack);
     return;
@@ -16,12 +16,12 @@ server.get("/", (req, res) => {
 });
 
 server.get("/connectmysql", (req, res) => {
-  mysqlDB.connect(function (err) {
+  mysqlDB.connect((err) => {
     if (err) {
       res.send("error connecting: " + err.stack);
       return;
     }
-    res.send("connected as id " + mysqlDB);
+    res.send("connected as id " + mysqlDB.threadId);
   });
 })
 
