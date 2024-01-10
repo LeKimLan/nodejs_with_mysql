@@ -12,7 +12,7 @@ mysqlDB.connect(function (err) {
 });
 
 server.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Server OK!");
 });
 
 server.get("/user", (req, res) => {
@@ -27,6 +27,10 @@ server.get("/user", (req, res) => {
     });
   });
 });
+
+// server.post("/user", (req, res) => {
+//   mysqlDB.query("insert into user set ?", req.body, (err, result) => {})
+// })
 
 //   mysqlDB.query("select * from user", (err, res) => {
 //     if (err) {
