@@ -3,28 +3,32 @@ const server = express();
 
 import { mysqlDB } from "./mysql.js";
 
-mysqlDB.connect(function (err) {
-  if (err) {
-    console.error("error connecting: " + err.stack);
-    return;
-  }
-  console.log("connected as id " + mysqlDB.threadId);
-});
+function connectMySQL() {
+  mysqlDB.connect(function (err) {
+    if (err) {
+      console.error("error connecting: " + err.stack);
+      return;
+    }
+    console.log("connected as id " + mysqlDB.threadId);
+  });
+}
+
 
 server.get("/", (req, res) => {
   res.send("Server OK!");
 });
 
-server.get("/user", (req, res) => {
+server.get("/user", (req, res) =>  {
+  connectMySQL()
   mysqlDB.query("select * from user", (err, result) => {
     if (err) {
       console.log("err", err);
       return;
     }
     res.json(result);
-    // mysqlDB.end((err) => {
-    //   console.log("err", err);
-    // });
+    mysqlDB.end(() => {
+      console.log("MySQL connection closed");
+    });
   });
 });
 
