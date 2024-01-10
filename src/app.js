@@ -18,6 +18,7 @@ mysqlDB.connect(function (err) {
     } 
     console.log('results', res);
     mysqlDB.end((err) => {
+      console.log('err', err)
     });
 })
 
