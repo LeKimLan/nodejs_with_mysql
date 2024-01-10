@@ -21,7 +21,7 @@ server.get("/connectmysql", (req, res) => {
       res.send("error connecting: " + err.stack);
       return;
     }
-    res.send("connected as id " + mysqlDB.threadId);
+    res.send("connected as id " + mysqlDB);
   });
 })
 
