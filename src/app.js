@@ -32,6 +32,7 @@ server.get("/connectmysql", (req, res) => {
     }
     res.send("connected as id " + mysqlDB.threadId);
   });
+  return mysqlDB
 })
 
 server.get("/user", (req, res) => {
