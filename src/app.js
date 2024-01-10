@@ -3,40 +3,33 @@ const server = express();
 
 import { mysqlDB } from "./mysql.js";
 
-function connectMySQL() {
-  mysqlDB.connect(function (err) {
-    if (err) {
-      console.error("error connecting: " + err.stack);
-      return;
-    }
-    console.log("connected as id " + mysqlDB.threadId);
-  });
-}
+mysqlDB.connect(function (err) {
+  if (err) {
+    console.error("error connecting: " + err.stack);
+    return;
+  }
+  console.log("connected as id " + mysqlDB.threadId);
+});
 
 server.get("/", (req, res) => {
   res.send("Server OK!");
 });
 
 server.get("/user", (req, res) => {
-  try {
-    connectMySQL().then(() => {
-      mysqlDB.query("select * from user", (err, result) => {
-        if (err) {
-          console.log("err", err);
-          return;
-        }
-        res.json(result);
-        mysqlDB.end(() => {
-          console.log("MySQL connection closed");
-        });
-      });
-    });
-  } catch {
-    (err) => {
+  mysqlDB.query("select * from user", (err, result) => {
+    if (err) {
       console.log("err", err);
-    };
-  }
+      return;
+    }
+    res.status(200).json(result);
+  });
 });
+
+server.get("/closemysql", (req, res) => {
+  mysqlDB.end(() => {
+    res.send("MySQL connection closed");
+  });
+})
 
 // server.post("/user", (req, res) => {
 //   mysqlDB.query("insert into user set ?", req.body, (err, result) => {})
