@@ -36,7 +36,11 @@ server.get("/user", (req, res) => {
 });
 
 server.get("/closemysql", (req, res) => {
-  mysqlDB.destroy(() => {
+  mysqlDB.destroy((err) => {
+    if (err) {
+      console.log("err", err);
+      return
+    }
     res.send("MySQL connection closed");
   });
 })
