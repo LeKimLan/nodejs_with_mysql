@@ -15,6 +15,16 @@ server.get("/", (req, res) => {
   res.send("Server OK!");
 });
 
+server.get("/connectmysql", (req, res) => {
+  mysqlDB.connect(function (err) {
+    if (err) {
+      res.send("error connecting: " + err.stack);
+      return;
+    }
+    res.send("connected as id " + mysqlDB.threadId);
+  });
+})
+
 server.get("/user", (req, res) => {
   mysqlDB.query("select * from user", (err, result) => {
     if (err) {
