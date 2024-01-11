@@ -1,4 +1,4 @@
-import mysql from 'mysql2'
+
 import express from "express";
 const server = express();
 
@@ -16,26 +16,26 @@ server.get("/", (req, res) => {
   res.send("Server OK!");
 });
 
-server.get("/connectmysql", (req, res) => {
-  const mysqlDB = mysql.createConnection({
-    host: '103.167.89.118',
-    user: "lan",
-    password: "admin123",
-    database: "test_remote_control_mysql",
-    port: 3306
-  });
+// server.get("/connectmysql", (req, res) => {
+//   const mysqlDB = mysql.createConnection({
+//     host: '103.167.89.118',
+//     user: "lan",
+//     password: "admin123",
+//     database: "test_remote_control_mysql",
+//     port: 3306
+//   });
 
-  mysqlDB.connect((err) => {
-    if (err) {
-      res.send("error connecting: " + err.stack);
-      return;
-    }
-    res.send("connected as id " + mysqlDB.threadId);
-  });
-  return mysqlDB
-})
+//   mysqlDB.connect((err) => {
+//     if (err) {
+//       res.send("error connecting: " + err.stack);
+//       return;
+//     }
+//     res.send("connected as id " + mysqlDB.threadId);
+//   });
+//   return mysqlDB
+// })
 
-server.get("/user", (req, res) => {
+server.get("/users", (req, res) => {
   mysqlDB.query("select * from user", (err, result) => {
     if (err) {
       console.log("err", err);
@@ -44,6 +44,15 @@ server.get("/user", (req, res) => {
     res.status(200).json(result);
   });
 });
+
+server.get("/users/:id", (req, res) => {
+  mysqlDB.query(`select * from user where id = ${req.params.id}`, (err, result) => {
+    if (err) {
+      console.log("err", err);
+      return;
+    } res.status(200).json(result);
+  });
+})
 
 server.get("/closemysql", (req, res) => {
   mysqlDB.end((err) => {
