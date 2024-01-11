@@ -1,6 +1,8 @@
-
 import express from "express";
 const server = express();
+
+import bodyParser from "body-parser";
+server.use(bodyParser.json());
 
 import { mysqlDB } from "./mysql.js";
 
@@ -52,6 +54,24 @@ server.get("/users/:id", (req, res) => {
       return;
     } res.status(200).json(result);
   });
+})
+
+server.post("/add/newUser", (req, res) => {
+  let newUser = req.body;
+  mysqlDB.query(`insert into user (id, userName, password) value ("${req.body.id}","${req.body.userName}","${req.body.password}") `, (err, addResult) => {
+    if (err) {
+      console.log('err', err);
+      return;
+    } 
+    mysqlDB.query("select * from user", (err, newDatabase) => {
+      if (err) {
+        console.log("err", err);
+        return;
+      }
+      res.status(200).json(newDatabase);
+    });
+    res.status(200).json(addResult);
+  })
 })
 
 server.get("/closemysql", (req, res) => {
