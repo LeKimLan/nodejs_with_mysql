@@ -55,6 +55,9 @@ server.get("/users/:id", (req, res) => {
         console.log("err", err);
         return;
       }
+      if (result.length == 0) {
+        res.status(404).json({ message: "User not found" });
+      }
       res.status(200).json(result);
     }
   );
@@ -85,7 +88,7 @@ server.delete("/delete/userID/:id", (req, res) => {
       if (result.affectedRows == 1) {
         res.send(`User with ID ${req.params.id} has been deleted.`);
       } else {
-        res.status(404).send('User not found.');
+        res.status(404).send("User not found.");
       }
       mysqlDB.query("select * from user", (err, newTable) => {
         if (err) {
