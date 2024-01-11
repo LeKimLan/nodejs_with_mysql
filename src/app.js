@@ -69,25 +69,23 @@ server.post("/add/newUser", (req, res) => {
         console.log("err", err);
         return;
       }
-      mysqlDB.query("select * from user", (err, newTable) => {
-        if (err) {
-          console.log("err", err);
-          return;
-        }
-        res.status(200).json(newTable);
-      });
       res.status(200).json(newUser);
     }
   );
 });
 
-server.get("/delete/userID/:id", (req, res) => {
+server.delete("/delete/userID/:id", (req, res) => {
   mysqlDB.query(
     `delete from user where id = ${req.params.id}`,
     (err, result) => {
       if (err) {
         console.log("err", err);
         return;
+      }
+      if (result.affectedRows == 1) {
+        res.send(`User with ID ${req.params.id} has been deleted.`);
+      } else {
+        res.status(404).send('User not found.');
       }
       mysqlDB.query("select * from user", (err, newTable) => {
         if (err) {
