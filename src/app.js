@@ -70,7 +70,7 @@ server.post("/add/newUser", (req, res) => {
       }
       res.status(200).json(newDatabase);
     });
-    res.status(200).json(addResult);
+    res.status(200).json(newUser);
   })
 })
 
