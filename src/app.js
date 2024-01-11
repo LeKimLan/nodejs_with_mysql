@@ -48,88 +48,69 @@ server.get("/users", (req, res) => {
 });
 
 server.get("/users/:id", (req, res) => {
-  mysqlDB.query(`select * from user where id = ${req.params.id}`, (err, result) => {
-    if (err) {
-      console.log("err", err);
-      return;
-    } res.status(200).json(result);
-  });
-})
-
-server.post("/add/newUser", (req, res) => {
-  let newUser = req.body;
-  mysqlDB.query(`insert into user (id, userName, password) value ("${req.body.id}","${req.body.userName}","${req.body.password}") `, (err, addResult) => {
-    if (err) {
-      console.log('err', err);
-      return;
-    } 
-    mysqlDB.query("select * from user", (err, newDatabase) => {
+  mysqlDB.query(
+    `select * from user where id = ${req.params.id}`,
+    (err, result) => {
       if (err) {
         console.log("err", err);
         return;
       }
-      res.status(200).json(newDatabase);
-    });
-    res.status(200).json(newUser);
-  })
-})
+      res.status(200).json(result);
+    }
+  );
+});
+
+server.post("/add/newUser", (req, res) => {
+  let newUser = req.body;
+  mysqlDB.query(
+    `insert into user (id, userName, password) value ("${req.body.id}","${req.body.userName}","${req.body.password}") `,
+    (err, addResult) => {
+      if (err) {
+        console.log("err", err);
+        return;
+      }
+      mysqlDB.query("select * from user", (err, newTable) => {
+        if (err) {
+          console.log("err", err);
+          return;
+        }
+        res.status(200).json(newTable);
+      });
+      res.status(200).json(newUser);
+    }
+  );
+});
+
+server.get("/delete/userID/:id", (req, res) => {
+  mysqlDB.query(
+    `delete from user where id = ${req.params.id}`,
+    (err, result) => {
+      if (err) {
+        console.log("err", err);
+        return;
+      }
+      mysqlDB.query("select * from user", (err, newTable) => {
+        if (err) {
+          console.log("err", err);
+          return;
+        }
+        res.status(200).json(newTable);
+      });
+    }
+  );
+});
+
+// server.get("/", () => {});
 
 server.get("/closemysql", (req, res) => {
   mysqlDB.end((err) => {
     if (err) {
       console.log("err", err);
-      return
+      return;
     }
     res.send("MySQL connection closed");
   });
-})
-
-// server.post("/user", (req, res) => {
-//   mysqlDB.query("insert into user set ?", req.body, (err, result) => {})
-// })
-
-//   mysqlDB.query("select * from user", (err, res) => {
-//     if (err) {
-//         console.log("err",err);
-//         return;
-//     }
-//     console.log('results', res);
-//     mysqlDB.end((err) => {
-//       console.log("connection end");
-//     });
-// })
-
-// connection.query("select * from test_tools_table where id = 3", (err, res) => {
-//     if (err) {
-//         console.log("err",err);
-//         return;
-//     }
-//     console.log('results', res);
-// })
-
-// connection.query("select * from test_tools_table where password = 'dmnode'", (err, res) => {
-//     if (err) {
-//         console.log("err",err);
-//         return;
-//     }
-//     console.log('results', res);
-// })
-
-// connection.query("select * from test_tools_table where password = 'dmnode' and id = 3", (err, res) => {
-//     if (err) {
-//         console.log("err",err);
-//         return;
-//     }
-//     console.log('results', res);
-// })
-
-// connection.query("insert into test_tools_table (id,userName,password) values ('5','lan_5th_test','WEWEWEWE')", (err, res) => {
-//     if (err) {
-//         cconsole.log("err",err);
-//         return;
-//     }
-//     console.log('results', res);
-// })
+});
 
 server.listen(3000, () => {
   console.log("server is on");
